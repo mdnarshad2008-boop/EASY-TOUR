@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Easy Tour — Smart Tourism Ecosystem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#132A22;
+    --pine:#1F4D3D;
+    --pine-deep:#0F2E22;
+    --paper:#F1F4EE;
+    --paper-warm:#EAEFE4;
+    --amber:#E2A33B;
+    --rust:#B5432A;
+    --slate:#3B5B6B;
+    --mist:#D8E2D6;
+    --line: rgba(19,42,34,0.14);
+    --white:#FDFDFB;
+    --radius-card: 4px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Space Grotesk', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    margin:0;
+    color:var(--pine-deep);
+    letter-spacing:-0.01em;
+  }
+  p{margin:0;}
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+  section{position:relative;}
+  ::selection{background:var(--amber);color:var(--ink);}
+  :focus-visible{outline:2px solid var(--pine);outline-offset:3px;}
+
+  /* ---------- contour background texture ---------- */
+  .contours{
+    position:absolute;inset:0;pointer-events:none;opacity:0.5;z-index:0;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(241,244,238,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 28px;max-width:1180px;margin:0 auto;
+  }
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+  .brand svg{width:30px;height:30px;flex:none;}
+  .brand-text{font-family:'Fraunces',serif;font-weight:600;font-size:1.28rem;color:var(--pine-deep);}
+  .brand-text span{color:var(--amber);}
+  nav ul{list-style:none;display:flex;gap:26px;margin:0;padding:0;}
+  nav ul li a{
+    text-decoration:none;font-size:0.92rem;color:var(--ink);opacity:0.78;
+    padding:6px 2px;border-bottom:2px solid transparent;transition:opacity .15s,border-color .15s;
+  }
+  nav ul li a:hover{opacity:1;border-color:var(--amber);}
+  .nav-actions{display:flex;align-items:center;gap:14px;}
+  .lang-toggle{
+    display:flex;border:1px solid var(--line);border-radius:20px;overflow:hidden;font-size:0.78rem;
+  }
+  .lang-toggle button{
+    border:none;background:transparent;padding:6px 12px;cursor:pointer;font-family:inherit;color:var(--ink);
+  }
+  .lang-toggle button.active{background:var(--pine);color:var(--white);}
+  .itin-pill{
+    display:flex;align-items:center;gap:6px;background:var(--pine-deep);color:var(--white);
+    border-radius:20px;padding:7px 14px;font-size:0.82rem;text-decoration:none;
+  }
+  .itin-pill b{font-weight:700;color:var(--amber);}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--pine);color:var(--white);border:none;
+    padding:12px 22px;border-radius:2px;font-family:'Space Grotesk',sans-serif;
+    font-size:0.92rem;font-weight:600;cursor:pointer;text-decoration:none;
+    transition:background .15s, transform .1s;
+  }
+  .btn:hover{background:var(--pine-deep);}
+  .btn:active{transform:translateY(1px);}
+  .btn.ghost{background:transparent;color:var(--pine-deep);border:1px solid var(--pine-deep);}
+  .btn.ghost:hover{background:var(--pine-deep);color:var(--white);}
+  .btn.amber{background:var(--amber);color:var(--ink);}
+  .btn.amber:hover{background:#c98a25;}
+  .btn.small{padding:8px 14px;font-size:0.8rem;}
+  .btn.block{width:100%;justify-content:center;}
+  .btn[disabled]{opacity:0.45;cursor:not-allowed;}
+
+  /* ---------- hero ---------- */
+  .hero{padding:76px 0 90px;overflow:hidden;}
+  .hero .wrap{display:grid;grid-template-columns:1.05fr 0.95fr;gap:56px;align-items:center;position:relative;z-index:1;}
+  .eyebrow-row{display:flex;align-items:center;gap:10px;margin-bottom:20px;color:var(--slate);font-size:0.86rem;}
+  .eyebrow-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);}
+  h1.headline{font-size:3.15rem;line-height:1.04;max-width:640px;}
+  .headline em{font-style:italic;color:var(--pine);}
+  .hero-sub{margin-top:22px;font-size:1.08rem;max-width:480px;color:#2c443a;}
+  .hero-cta{display:flex;gap:14px;margin-top:32px;flex-wrap:wrap;}
+  .stat-row{display:flex;gap:36px;margin-top:48px;flex-wrap:wrap;}
+  .stat b{display:block;font-family:'Fraunces',serif;font-size:1.9rem;color:var(--pine-deep);}
+  .stat span{font-size:0.82rem;color:var(--slate);}
+
+  /* AI demo card in hero */
+  .ai-demo-card{
+    background:var(--white);border:1px solid var(--line);border-radius:var(--radius-card);
+    box-shadow:0 30px 60px -30px rgba(15,46,34,0.35);
+    overflow:hidden;
+  }
+  .ai-demo-head{
+    background:var(--pine-deep);color:var(--white);padding:16px 20px;
+    display:flex;align-items:center;gap:10px;font-size:0.86rem;
+  }
+  .pulse{width:8px;height:8px;border-radius:50%;background:#5FD08A;box-shadow:0 0 0 rgba(95,208,138,0.5);animation:pulse 2s infinite;}
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(95,208,138,0.5);}
+    70%{box-shadow:0 0 0 8px rgba(95,208,138,0);}
+    100%{box-shadow:0 0 0 0 rgba(95,208,138,0);}
+  }
+  .ai-demo-body{padding:22px;}
+  .ai-demo-body label{font-size:0.78rem;color:var(--slate);display:block;margin-bottom:6px;}
+  select, input[type=text]{
+    width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:2px;
+    font-family:inherit;font-size:0.94rem;background:var(--paper-warm);color:var(--ink);
+  }
+  .ai-reply{
+    margin-top:18px;border-top:1px dashed var(--line);padding-top:16px;min-height:150px;
+  }
+  .alert-badge{
+    display:inline-flex;align-items:center;gap:6px;font-size:0.76rem;font-weight:600;
+    padding:4px 10px;border-radius:20px;margin-bottom:10px;
+  }
+  .alert-badge.warn{background:#F7E3D6;color:var(--rust);}
+  .alert-badge.ok{background:#DDEEDF;color:#1F6B3E;}
+  .alert-badge.crowd{background:#FBEFD2;color:#8A5A0A;}
+  .ai-reply p{font-size:0.92rem;color:#243b32;margin-bottom:10px;}
+  .alt-chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+  .alt-chip{
+    border:1px solid var(--pine);color:var(--pine-deep);background:var(--paper);
+    border-radius:20px;padding:6px 12px;font-size:0.8rem;cursor:pointer;
+  }
+  .alt-chip:hover{background:var(--pine);color:var(--white);}
+
+  /* ---------- section headings ---------- */
+  .sec-head{max-width:640px;margin-bottom:42px;}
+  .sec-kicker{color:var(--amber);font-family:'Fraunces',serif;font-style:italic;font-size:1.05rem;margin-bottom:6px;display:block;}
+  .sec-head h2{font-size:2.15rem;line-height:1.12;}
+  .sec-head p{margin-top:14px;color:#2c443a;font-size:1rem;}
+  section.band{padding:88px 0;}
+  section.band.alt{background:var(--paper-warm);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  section.band.dark{background:var(--pine-deep);color:var(--white);}
+  section.band.dark .sec-head h2, section.band.dark h3{color:var(--white);}
+  section.band.dark .sec-head p{color:#C9DBD1;}
+
+  /* ---------- AI guide full section ---------- */
+  .guide-panel{
+    display:grid;grid-template-columns:340px 1fr;gap:0;
+    border:1px solid var(--line);background:var(--white);
+  }
+  .guide-controls{padding:30px;border-right:1px solid var(--line);}
+  .guide-controls label{font-size:0.8rem;color:var(--slate);display:block;margin:16px 0 6px;}
+  .guide-controls label:first-child{margin-top:0;}
+  .guide-output{padding:30px;min-height:360px;}
+  .cond-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0 22px;}
+  .cond-tile{border:1px solid var(--line);padding:14px;text-align:left;}
+  .cond-tile span{display:block;font-size:0.74rem;color:var(--slate);margin-bottom:4px;}
+  .cond-tile b{font-family:'Fraunces',serif;font-size:1.1rem;}
+  .alt-card-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px;}
+  .alt-card{border:1px solid var(--line);padding:16px;background:var(--paper-warm);}
+  .alt-card h4{font-size:1.02rem;margin-bottom:6px;}
+  .alt-card p{font-size:0.82rem;color:#3d554a;margin-bottom:10px;}
+  .tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+  .tag{font-size:0.7rem;background:var(--mist);color:#254739;padding:3px 8px;border-radius:20px;}
+  .tag.eco{background:#DDEEDF;color:#1F6B3E;}
+  .tag.permit{background:#F7E3D6;color:var(--rust);}
+
+  /* ---------- travel section ---------- */
+  .travel-form{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:16px;align-items:end;margin-bottom:36px;}
+  .travel-form label{font-size:0.78rem;color:var(--slate);display:block;margin-bottom:6px;}
+  .mode-tabs{display:flex;gap:8px;margin-bottom:22px;}
+  .mode-tab{
+    border:1px solid var(--line);background:var(--white);padding:9px 18px;font-size:0.85rem;
+    cursor:pointer;border-radius:20px;
+  }
+  .mode-tab.active{background:var(--pine);color:var(--white);border-color:var(--pine);}
+  .leg{border:1px solid var(--line);background:var(--white);margin-bottom:16px;}
+  .leg-head{padding:14px 20px;background:var(--paper-warm);border-bottom:1px solid var(--line);font-size:0.86rem;color:var(--slate);display:flex;justify-content:space-between;}
+  .fare-row{display:grid;grid-template-columns:1.4fr 0.8fr 0.8fr 0.8fr auto;gap:12px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);font-size:0.9rem;}
+  .fare-row:last-child{border-bottom:none;}
+  .fare-row .mode-name{font-weight:600;display:flex;align-items:center;gap:8px;}
+  .fare-row .muted{color:var(--slate);font-size:0.82rem;}
+  .fare-row .price{font-family:'Fraunces',serif;font-size:1.1rem;color:var(--pine-deep);}
+  .note-strip{
+    display:flex;gap:10px;align-items:flex-start;background:#FBEFD2;border:1px solid #E9CE8E;
+    padding:12px 16px;font-size:0.85rem;color:#6b4a10;margin-top:6px;
+  }
+
+  /* ---------- stay section ---------- */
+  .stay-filter{display:flex;gap:12px;margin-bottom:28px;flex-wrap:wrap;}
+  .chip-filter{
+    border:1px solid var(--line);background:var(--white);padding:8px 16px;border-radius:20px;
+    font-size:0.84rem;cursor:pointer;
+  }
+  .chip-filter.active{background:var(--pine-deep);color:var(--white);border-color:var(--pine-deep);}
+  .stay-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  .stay-card{border:1px solid var(--line);background:var(--white);display:flex;flex-direction:column;}
+  .stay-img{height:140px;background:linear-gradient(135deg,var(--mist),var(--paper-warm));display:flex;align-items:center;justify-content:center;color:var(--pine);}
+  .stay-body{padding:18px;flex:1;display:flex;flex-direction:column;}
+  .stay-body h4{font-size:1.05rem;margin-bottom:4px;}
+  .stay-meta{font-size:0.8rem;color:var(--slate);margin-bottom:10px;}
+  .stay-price{font-family:'Fraunces',serif;font-size:1.25rem;color:var(--pine-deep);margin:10px 0;}
+  .stay-price span{font-size:0.78rem;color:var(--slate);font-family:'Space Grotesk',sans-serif;}
+  .rating{display:inline-flex;align-items:center;gap:4px;background:#DDEEDF;color:#1F6B3E;font-size:0.76rem;padding:2px 8px;border-radius:20px;}
+
+  /* ---------- crowd section ---------- */
+  .crowd-layout{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+  .chart-card{border:1px solid var(--line);background:var(--white);padding:26px;}
+  .bars{display:flex;align-items:flex-end;gap:4px;height:180px;margin-top:18px;}
+  .bar{flex:1;background:var(--mist);position:relative;border-radius:2px 2px 0 0;transition:height .4s ease, background .4s ease;}
+  .bar.now{outline:2px solid var(--amber);outline-offset:1px;}
+  .bar-labels{display:flex;justify-content:space-between;font-size:0.68rem;color:var(--slate);margin-top:6px;}
+  .crowd-callout{border-left:3px solid var(--rust);background:#FBEFEA;padding:16px 18px;margin-top:20px;font-size:0.9rem;}
+  .crowd-callout.good{border-color:#1F6B3E;background:#E6F4E9;}
+  .crowd-callout b{display:block;margin-bottom:4px;}
+  .legend{display:flex;gap:16px;margin-top:14px;font-size:0.78rem;color:var(--slate);}
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .legend i{width:10px;height:10px;display:inline-block;border-radius:2px;}
+
+  /* ---------- safety ---------- */
+  .safety-grid{display:grid;grid-template-columns:1.3fr 0.7fr;gap:40px;}
+  .alert-item{
+    display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;
+    padding:16px 18px;border:1px solid var(--line);background:var(--white);margin-bottom:12px;
+  }
+  .sev-dot{width:10px;height:10px;border-radius:50%;}
+  .sev-dot.high{background:var(--rust);}
+  .sev-dot.med{background:var(--amber);}
+  .sev-dot.low{background:#4C8C6B;}
+  .alert-item h4{font-size:0.95rem;margin-bottom:3px;}
+  .alert-item span{font-size:0.78rem;color:var(--slate);}
+  .sos-card{background:var(--rust);color:var(--white);padding:26px;text-align:center;}
+  .sos-card h3{color:var(--white);font-size:1.3rem;margin-bottom:8px;}
+  .sos-card p{font-size:0.86rem;opacity:0.9;margin-bottom:18px;}
+  .sos-btn{
+    width:88px;height:88px;border-radius:50%;background:var(--white);color:var(--rust);
+    border:none;font-family:'Fraunces',serif;font-weight:700;font-size:1rem;cursor:pointer;
+    margin:0 auto 18px;display:flex;align-items:center;justify-content:center;
+  }
+  .contact-list{margin-top:18px;border-top:1px solid rgba(255,255,255,0.3);padding-top:16px;text-align:left;font-size:0.86rem;}
+  .contact-list div{display:flex;justify-content:space-between;padding:6px 0;}
+
+  /* ---------- itinerary ---------- */
+  .itin-layout{display:grid;grid-template-columns:1fr 1fr;gap:48px;}
+  .itin-list{border:1px solid var(--line);background:var(--white);min-height:220px;}
+  .itin-empty{padding:40px 24px;text-align:center;color:var(--slate);font-size:0.9rem;}
+  .itin-row{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);}
+  .itin-row:last-child{border-bottom:none;}
+  .itin-row .day-badge{background:var(--pine);color:var(--white);font-size:0.72rem;padding:3px 9px;border-radius:20px;margin-right:10px;}
+  .remove-btn{background:none;border:none;color:var(--rust);cursor:pointer;font-size:0.8rem;text-decoration:underline;}
+  .eco-score{display:flex;align-items:center;gap:14px;margin-top:8px;}
+  .eco-bar{flex:1;height:8px;background:var(--mist);border-radius:6px;overflow:hidden;}
+  .eco-bar-fill{height:100%;background:#1F6B3E;}
+
+  /* ---------- community / guides / gamification ---------- */
+  .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  .feature-card{border:1px solid var(--line);background:var(--white);padding:22px;}
+  .feature-card h4{font-size:1.02rem;margin-bottom:8px;}
+  .feature-card p{font-size:0.87rem;color:#3d554a;}
+  .feature-card .ico{width:34px;height:34px;margin-bottom:14px;color:var(--pine);}
+  .guide-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .guide-card{border:1px solid var(--line);background:var(--white);padding:18px;text-align:center;}
+  .avatar{width:56px;height:56px;border-radius:50%;background:var(--mist);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:1.2rem;color:var(--pine-deep);}
+  .badge-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:20px;}
+  .badge{
+    display:flex;flex-direction:column;align-items:center;gap:6px;width:88px;text-align:center;
+  }
+  .badge .circle{width:56px;height:56px;border-radius:50%;background:var(--paper-warm);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:1.4rem;}
+  .badge span{font-size:0.72rem;color:var(--slate);}
+  .points-pill{display:inline-flex;align-items:center;gap:8px;background:var(--amber);color:var(--ink);padding:8px 16px;border-radius:20px;font-weight:600;font-size:0.86rem;}
+
+  /* ---------- footer ---------- */
+  footer{background:var(--pine-deep);color:#C9DBD1;padding:56px 0 26px;}
+  .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,0.15);}
+  footer h4{color:var(--white);font-size:0.92rem;margin-bottom:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;}
+  footer ul{list-style:none;padding:0;margin:0;font-size:0.86rem;}
+  footer ul li{margin-bottom:9px;opacity:0.85;}
+  .foot-bottom{display:flex;justify-content:space-between;padding-top:22px;font-size:0.8rem;opacity:0.7;flex-wrap:wrap;gap:10px;}
+
+  /* ---------- modal ---------- */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(15,46,34,0.55);display:none;align-items:center;justify-content:center;z-index:100;padding:20px;
+  }
+  .modal-overlay.show{display:flex;}
+  .modal-box{background:var(--white);max-width:420px;width:100%;padding:30px;border-radius:2px;text-align:center;}
+  .modal-box h3{margin-bottom:12px;}
+  .modal-box p{font-size:0.9rem;color:#3d554a;margin-bottom:20px;}
+
+  .toast{
+    position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--pine-deep);color:var(--white);padding:12px 22px;border-radius:30px;font-size:0.86rem;
+    opacity:0;pointer-events:none;transition:opacity .25s, transform .25s;z-index:200;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  @media (max-width:920px){
+    nav ul{display:none;}
+    .hero .wrap{grid-template-columns:1fr;}
+    h1.headline{font-size:2.3rem;}
+    .guide-panel{grid-template-columns:1fr;}
+    .guide-controls{border-right:none;border-bottom:1px solid var(--line);}
+    .cond-grid, .alt-card-row, .stay-grid, .three-col, .guide-cards{grid-template-columns:1fr 1fr;}
+    .travel-form{grid-template-columns:1fr 1fr;}
+    .crowd-layout, .safety-grid, .itin-layout, .footer-grid{grid-template-columns:1fr;}
+    .fare-row{grid-template-columns:1fr 1fr;row-gap:6px;}
+  }
+  @media (max-width:600px){
+    .cond-grid, .alt-card-row, .stay-grid, .three-col, .guide-cards{grid-template-columns:1fr;}
+    .wrap{padding:0 18px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- SOS MODAL -->
+<div class="modal-overlay" id="sosModal">
+  <div class="modal-box">
+    <h3>Alert sent</h3>
+    <p>Your live location has been shared with the nearest tourist police unit and control room. Stay where you are if it's safe to do so. Help is on the way.</p>
+    <div class="contact-list" style="text-align:left;color:#2c443a;">
+      <div><span>Tourist Helpline</span><b>1363</b></div>
+      <div><span>National Emergency</span><b>112</b></div>
+      <div><span>Nearest Control Room</span><b>Mussoorie — 0.9 km</b></div>
+    </div>
+    <button class="btn block" style="margin-top:20px;" onclick="closeModal('sosModal')">Close</button>
+  </div>
+</div>
+
+<!-- GUIDE BOOKING MODAL -->
+<div class="modal-overlay" id="guideModal">
+  <div class="modal-box">
+    <h3>Request sent</h3>
+    <p id="guideModalText">Your request has been sent to the local guide. They typically respond within 20 minutes.</p>
+    <button class="btn block" onclick="closeModal('guideModal')">Done</button>
+  </div>
+</div>
+
+<header>
+  <div class="nav">
+    <a href="#home" class="brand">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 30L13 12L20 22L26 14L38 30" stroke="#1F4D3D" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M2 30L13 12L20 22L26 14L38 30" stroke="#E2A33B" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="2 200" stroke-dashoffset="0"/>
+        <circle cx="13" cy="12" r="2" fill="#E2A33B"/>
+      </svg>
+      <span class="brand-text" data-en="Easy <span>Tour</span>" data-hi="ईज़ी <span>टूर</span>">Easy <span>Tour</span></span>
+    </a>
+    <nav>
+      <ul>
+        <li><a href="#guide" data-en="AI Guide" data-hi="एआई गाइड">AI Guide</a></li>
+        <li><a href="#travel" data-en="Travel" data-hi="यात्रा">Travel</a></li>
+        <li><a href="#stay" data-en="Stay" data-hi="ठहरना">Stay</a></li>
+        <li><a href="#crowd" data-en="Live Crowd" data-hi="भीड़">Live Crowd</a></li>
+        <li><a href="#safety" data-en="Safety" data-hi="सुरक्षा">Safety</a></li>
+        <li><a href="#itinerary" data-en="Itinerary" data-hi="यात्रा-सूची">Itinerary</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <div class="lang-toggle">
+        <button class="active" onclick="setLang('en')" id="langEnBtn">EN</button>
+        <button onclick="setLang('hi')" id="langHiBtn">हिं</button>
+      </div>
+      <a href="#itinerary" class="itin-pill">🧭 <b id="itinCount">0</b> saved</a>
+    </div>
+  </div>
+</header>
+
+<section id="home" class="hero">
+  <svg class="contours" viewBox="0 0 1180 640" preserveAspectRatio="none">
+    <path d="M-50 500 C 200 420, 350 560, 600 480 S 1000 380, 1250 470" stroke="#1F4D3D" stroke-width="1" fill="none" opacity="0.25"/>
+    <path d="M-50 540 C 220 460, 380 600, 620 520 S 1020 420, 1250 510" stroke="#1F4D3D" stroke-width="1" fill="none" opacity="0.18"/>
+    <path d="M-50 580 C 240 500, 410 640, 640 560 S 1040 460, 1250 550" stroke="#1F4D3D" stroke-width="1" fill="none" opacity="0.12"/>
+    <path d="M-50 460 C 180 380, 330 500, 580 430 S 980 330, 1250 420" stroke="#E2A33B" stroke-width="1" fill="none" opacity="0.15"/>
+  </svg>
+  <div class="wrap">
+    <div>
+      <div class="eyebrow-row"><span class="eyebrow-dot"></span><span data-en="Smart India Hackathon — Tourism Ecosystem Prototype" data-hi="स्मार्ट इंडिया हैकाथॉन — पर्यटन प्रोटोटाइप">Smart India Hackathon — Tourism Ecosystem Prototype</span></div>
+      <h1 class="headline" data-en="A hill trip that <em>reroutes itself</em> before you get stuck." data-hi="एक ऐसी पहाड़ी यात्रा जो फंसने से पहले <em>खुद रास्ता बदल दे</em>।">A hill trip that <em>reroutes itself</em> before you get stuck.</h1>
+      <p class="hero-sub" data-en="One ecosystem for the whole trip — an AI guide that reads live landslide, weather and crowd data, honest fares across train, bus and taxi, verified stays, and a one-tap SOS for the hills." data-hi="पूरी यात्रा के लिए एक ही मंच — भूस्खलन, मौसम और भीड़ के लाइव डेटा को पढ़ने वाला एआई गाइड, ट्रेन-बस-टैक्सी के सही किराए, सत्यापित ठहराव, और पहाड़ों के लिए एक-टैप एसओएस।">One ecosystem for the whole trip — an AI guide that reads live landslide, weather and crowd data, honest fares across train, bus and taxi, verified stays, and a one-tap SOS for the hills.</p>
+      <div class="hero-cta">
+        <a href="#guide" class="btn" data-en="Ask the AI guide" data-hi="एआई गाइड से पूछें">Ask the AI guide</a>
+        <a href="#travel" class="btn ghost" data-en="Compare fares" data-hi="किराया देखें">Compare fares</a>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><b>7</b><span data-en="Uttarakhand routes tracked" data-hi="ट्रैक किए गए मार्ग">Uttarakhand routes tracked</span></div>
+        <div class="stat"><b>24×7</b><span data-en="hazard &amp; crowd monitoring" data-hi="खतरा और भीड़ निगरानी">hazard &amp; crowd monitoring</span></div>
+        <div class="stat"><b>2</b><span data-en="languages, more on the way" data-hi="भाषाएं, और जल्द आएंगी">languages, more on the way</span></div>
+      </div>
+    </div>
+
+    <div class="ai-demo-card">
+      <div class="ai-demo-head"><span class="pulse"></span> <span data-en="Live advisory demo" data-hi="लाइव सलाह डेमो">Live advisory demo</span></div>
+      <div class="ai-demo-body">
+        <label data-en="Where are you headed?" data-hi="आप कहाँ जाना चाहते हैं?">Where are you headed?</label>
+        <select id="heroDest" onchange="renderHeroDemo()"></select>
+        <div class="ai-reply" id="heroReply"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= AI GUIDE ================= -->
+<section id="guide" class="band alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-kicker" data-en="01 — Plan" data-hi="०१ — योजना">01 — Plan</span>
+      <h2 data-en="Tell it where you want to go" data-hi="बताएं आप कहाँ जाना चाहते हैं">Tell it where you want to go</h2>
+      <p data-en="The guide checks live landslide reports, weather bulletins and footfall before it answers — and if your first choice is unsafe or overrun, it lines up nearby places worth the detour." data-hi="जवाब देने से पहले गाइड लाइव भूस्खलन रिपोर्ट, मौसम और भीड़ की जांच करता है — अगर पहली पसंद असुरक्षित है तो पास के विकल्प सुझाता है।">The guide checks live landslide reports, weather bulletins and footfall before it answers — and if your first choice is unsafe or overrun, it lines up nearby places worth the detour.</p>
+    </div>
+    <div class="guide-panel">
+      <div class="guide-controls">
+        <label data-en="Destination" data-hi="गंतव्य">Destination</label>
+        <select id="guideDest" onchange="renderGuide()"></select>
+        <label data-en="Travelling with" data-hi="साथ यात्री">Travelling with</label>
+        <select id="guideParty">
+          <option data-en="Solo" data-hi="अकेला">Solo</option>
+          <option data-en="Family with kids" data-hi="बच्चों के साथ परिवार">Family with kids</option>
+          <option data-en="Friends group" data-hi="दोस्तों का समूह">Friends group</option>
+          <option data-en="Elderly parents" data-hi="बुज़ुर्ग माता-पिता">Elderly parents</option>
+        </select>
+        <label data-en="Travel month" data-hi="यात्रा माह">Travel month</label>
+        <select id="guideMonth">
+          <option>September</option><option>October</option><option>December</option><option>May</option>
+        </select>
+        <button class="btn block" style="margin-top:20px;" onclick="renderGuide(true)" data-en="Ask AI guide" data-hi="एआई गाइड से पूछें">Ask AI guide</button>
+      </div>
+      <div class="guide-output" id="guideOutput"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TRAVEL ================= -->
+<section id="travel" class="band">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-kicker" data-en="02 — Get there" data-hi="०२ — पहुँचें">02 — Get there</span>
+      <h2 data-en="Every leg, every fare, one screen" data-hi="हर चरण, हर किराया, एक स्क्रीन">Every leg, every fare, one screen</h2>
+      <p data-en="Most hill towns don't have a station or airport of their own. Easy Tour splits the journey into the long-haul leg and the last mile, so the price you see is the price you pay." data-hi="ज़्यादातर पहाड़ी शहरों में अपना स्टेशन या हवाई अड्डा नहीं है। ईज़ी टूर यात्रा को दो हिस्सों में दिखाता है — लंबी दूरी और आख़िरी मील — ताकि किराया साफ़ रहे।">Most hill towns don't have a station or airport of their own. Easy Tour splits the journey into the long-haul leg and the last mile, so the price you see is the price you pay.</p>
+    </div>
+    <div class="travel-form">
+      <div>
+        <label data-en="From" data-hi="कहाँ से">From</label>
+        <select id="travelFrom" onchange="renderTravel()">
+          <option>Delhi</option>
+          <option>Dehradun</option>
+        </select>
+      </div>
+      <div>
+        <label data-en="To" data-hi="कहाँ तक">To</label>
+        <select id="travelTo" onchange="renderTravel()"></select>
+      </div>
+      <div>
+        <label data-en="Travellers" data-hi="यात्री">Travellers</label>
+        <select id="travelPax" onchange="renderTravel()">
+          <option>1</option><option selected>2</option><option>3</option><option>4</option>
+        </select>
+      </div>
+      <button class="btn" onclick="renderTravel()" data-en="Search" data-hi="खोजें">Search</button>
+    </div>
+    <div id="travelResults"></div>
+  </div>
+</section>
+
+<!-- ================= STAY ================= -->
+<section id="stay" class="band alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-kicker" data-en="03 — Stay" data-hi="०३ — ठहराव">03 — Stay</span>
+      <h2 data-en="Places to stay, sorted honestly" data-hi="ईमानदारी से चुनी गई ठहराव जगहें">Places to stay, sorted honestly</h2>
+      <p data-en="Filter by budget and see how far each stay really is from the main market — not the straight-line distance." data-hi="बजट के अनुसार फ़िल्टर करें और देखें कि हर ठहराव मुख्य बाज़ार से वास्तव में कितनी दूर है।">Filter by budget and see how far each stay really is from the main market — not the straight-line distance.</p>
+    </div>
+    <div class="stay-filter" id="stayFilter"></div>
+    <div class="stay-grid" id="stayGrid"></div>
+  </div>
+</section>
+
+<!-- ================= CROWD ================= -->
+<section id="crowd" class="band">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-kicker" data-en="04 — Time it right" data-hi="०४ — सही समय">04 — Time it right</span>
+      <h2 data-en="See the crowd before you're in it" data-hi="भीड़ में फंसने से पहले देखें">See the crowd before you're in it</h2>
+      <p data-en="Footfall is estimated from ticketing counters, parking occupancy and past patterns for each hour of the day." data-hi="भीड़ का अनुमान टिकट काउंटर, पार्किंग और पिछले पैटर्न के आधार पर हर घंटे के लिए लगाया जाता है।">Footfall is estimated from ticketing counters, parking occupancy and past patterns for each hour of the day.</p>
+    </div>
+    <div class="crowd-layout">
+      <div>
+        <label data-en="Spot" data-hi="स्थान">Spot</label>
+        <select id="crowdDest" onchange="renderCrowd()"></select>
+        <div id="crowdCalloutWrap"></div>
+      </div>
+      <div class="chart-card">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <span style="font-size:0.82rem;color:var(--slate);" data-en="Today's footfall by hour" data-hi="आज की भीड़ (घंटे अनुसार)">Today's footfall by hour</span>
+          <span style="font-size:0.78rem;color:var(--slate);" id="crowdNowLabel"></span>
+        </div>
+        <div class="bars" id="crowdBars"></div>
+        <div class="bar-labels"><span>6am</span><span>9am</span><span>12pm</span><span>3pm</span><span>6pm</span><span>9pm</span></div>
+        <div class="legend">
+          <span><i style="background:var(--mist);"></i> <span data-en="Comfortable" data-hi="आरामदायक">Comfortable</span></span>
+          <span><i style="background:var(--amber);"></i> <span data-en="Busy" data-hi="व्यस्त">Busy</span></span>
+          <span><i style="background:var(--rust);"></i> <span data-en="Overcrowded" data-hi="अत्यधिक भीड़">Overcrowded</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SAFETY ================= -->
+<section id="safety" class="band dark">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-kicker" data-en="05 — Stay safe" data-hi="०५ — सुरक्षित रहें">05 — Stay safe</span>
+      <h2 data-en="Alerts that reach you, not just a dashboard" data-hi="अलर्ट जो आप तक पहुँचें, सिर्फ़ डैशबोर्ड तक नहीं">Alerts that reach you, not just a dashboard</h2>
+      <p data-en="Live hazard feed for routes you've searched, plus a one-tap SOS that shares your location with the nearest tourist police unit." data-hi="आपके खोजे गए मार्गों के लिए लाइव खतरा फ़ीड, साथ ही एक-टैप एसओएस जो आपकी लोकेशन नज़दीकी पर्यटक पुलिस को भेजता है।">Live hazard feed for routes you've searched, plus a one-tap SOS that shares your location with the nearest tourist police unit.</p>
+    </div>
+    <div class="safety-grid">
+      <div id="alertFeed"></div>
+      <div class="sos-card">
+        <h3 data-en="Need help now?" data-hi="अभी मदद चाहिए?">Need help now?</h3>
+        <p data-en="Shares live location with the nearest control room." data-hi="नज़दीकी नियंत्रण कक्ष के साथ लाइव लोकेशन साझा करता है।">Shares live location with the nearest control room.</p>
+        <button class="sos-btn" onclick="openModal('sosModal')">SOS</button>
+        <div class="contact-list">
+          <div><span data-en="Tourist Helpline" data-hi="पर्यटक हेल्पलाइन">Tourist Helpline</span><b>1363</b></div>
+          <div><span data-en="National Emergency" data-hi="राष्ट्रीय आपातकाल">National Emergency</span><b>112</b></div>
+          <div><span data-en="Disaster Mgmt (UK)" data-hi="आपदा प्रबंधन (उ.खं.)">Disaster Mgmt (UK)</span><b>1070</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ITINERARY ================= -->
+<section id="itinerary" class="band alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-kicker" data-en="06 — Your trip" data-hi="०६ — आपकी यात्रा">06 — Your trip</span>
+      <h2 data-en="Everything you've saved, in one plan" data-hi="आपकी सारी बचत, एक योजना में">Everything you've saved, in one plan</h2>
+      <p data-en="Add a destination or stay from anywhere on the page — it lands here automatically, day by day." data-hi="पेज पर कहीं से भी गंतव्य या ठहराव जोड़ें — यह अपने आप यहाँ दिन-वार जुड़ जाएगा।">Add a destination or stay from anywhere on the page — it lands here automatically, day by day.</p>
+    </div>
+    <div class="itin-layout">
+      <div>
+        <div class="itin-list" id="itinList"></div>
+      </div>
+      <div>
+        <div class="feature-card">
+          <h4 data-en="Trip eco-footprint" data-hi="यात्रा पारिस्थितिक प्रभाव">Trip eco-footprint</h4>
+          <p data-en="Based on the places in your plan — fragile zones bring this down." data-hi="आपकी योजना में जगहों पर आधारित — नाज़ुक क्षेत्र इसे कम करते हैं।">Based on the places in your plan — fragile zones bring this down.</p>
+          <div class="eco-score"><div class="eco-bar"><div class="eco-bar-fill" id="ecoFill" style="width:70%;"></div></div><b id="ecoScoreLabel">70/100</b></div>
+        </div>
+        <div class="feature-card" style="margin-top:18px;">
+          <h4 data-en="Your explorer points" data-hi="आपके एक्सप्लोरर पॉइंट">Your explorer points</h4>
+          <p data-en="Earned by asking the guide, adding stops and choosing off-beat places." data-hi="गाइड से पूछने, स्टॉप जोड़ने और कम-भीड़ जगहें चुनने से अर्जित।">Earned by asking the guide, adding stops and choosing off-beat places.</p>
+          <div style="margin-top:12px;"><span class="points-pill">✦ <span id="pointsCount">0</span> pts</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COMMUNITY / MORE FEATURES ================= -->
+<section class="band">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-kicker" data-en="07 — Built for the hills" data-hi="०७ — पहाड़ों के लिए बना">07 — Built for the hills</span>
+      <h2 data-en="A few things that only matter here" data-hi="कुछ बातें जो सिर्फ़ यहाँ मायने रखती हैं">A few things that only matter here</h2>
+    </div>
+    <div class="three-col">
+      <div class="feature-card">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12h4l2-4 3 8 2-6 2 4h7"/></svg>
+        <h4 data-en="Offline-first maps" data-hi="ऑफ़लाइन-फर्स्ट मानचित्र">Offline-first maps</h4>
+        <p data-en="Routes past Chopta and Kedarnath lose signal for hours. Maps, permits and your itinerary are cached before you set out." data-hi="चोपता और केदारनाथ के आगे घंटों नेटवर्क नहीं मिलता। मानचित्र, परमिट और यात्रा-सूची निकलने से पहले ही सेव हो जाते हैं।">Routes past Chopta and Kedarnath lose signal for hours. Maps, permits and your itinerary are cached before you set out.</p>
+      </div>
+      <div class="feature-card">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l8 4v5c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V7l8-4z"/></svg>
+        <h4 data-en="Inner-line &amp; eco-permits" data-hi="इनर-लाइन और इको-परमिट">Inner-line &amp; eco-permits</h4>
+        <p data-en="Restricted zones near Kedarnath and Auli need a permit. Apply inside the app and carry a QR pass instead of paper." data-hi="केदारनाथ और औली के पास प्रतिबंधित क्षेत्रों में परमिट ज़रूरी है। ऐप के भीतर आवेदन करें और कागज़ के बजाय क्यूआर पास रखें।">Restricted zones near Kedarnath and Auli need a permit. Apply inside the app and carry a QR pass instead of paper.</p>
+      </div>
+      <div class="feature-card">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v20M4 7l8 5 8-5M4 17l8-5 8 5"/></svg>
+        <h4 data-en="Crowdsourced hazard reports" data-hi="सामुदायिक खतरा रिपोर्ट">Crowdsourced hazard reports</h4>
+        <p data-en="A tourist who sees a slip or a blocked road can flag it in one tap — it feeds the same AI guide, minutes later." data-hi="भूस्खलन या बंद सड़क देखने वाला पर्यटक एक टैप में रिपोर्ट कर सकता है — यह मिनटों में एआई गाइड तक पहुँच जाता है।">A tourist who sees a slip or a blocked road can flag it in one tap — it feeds the same AI guide, minutes later.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:60px;">
+      <div class="sec-head" style="margin-bottom:26px;">
+        <h3 style="font-size:1.5rem;" data-en="Local guides &amp; artisans" data-hi="स्थानीय गाइड और शिल्पकार">Local guides &amp; artisans</h3>
+        <p data-en="Bookable directly, so more of what you spend stays in the hills." data-hi="सीधे बुक करें, ताकि आपका ज़्यादा ख़र्च पहाड़ों में ही रहे।">Bookable directly, so more of what you spend stays in the hills.</p>
+      </div>
+      <div class="guide-cards" id="guideCards"></div>
+    </div>
+
+    <div style="margin-top:60px;">
+      <div class="sec-head" style="margin-bottom:20px;">
+        <h3 style="font-size:1.5rem;" data-en="Spread out, earn a badge" data-hi="फैलिए, बैज कमाइए">Spread out, earn a badge</h3>
+        <p data-en="Choosing a quieter alternative over an overcrowded hotspot earns recognition — and eases pressure on the popular few." data-hi="भीड़भाड़ वाली जगह की जगह शांत विकल्प चुनने पर पहचान मिलती है — और लोकप्रिय जगहों पर दबाव कम होता है।">Choosing a quieter alternative over an overcrowded hotspot earns recognition — and eases pressure on the popular few.</p>
+      </div>
+      <div class="badge-row">
+        <div class="badge"><div class="circle">🏔️</div><span data-en="Offbeat Explorer" data-hi="ऑफबीट खोजकर्ता">Offbeat Explorer</span></div>
+        <div class="badge"><div class="circle">🌿</div><span data-en="Eco Traveller" data-hi="इको ट्रैवलर">Eco Traveller</span></div>
+        <div class="badge"><div class="circle">🧭</div><span data-en="Route Planner" data-hi="रूट प्लानर">Route Planner</span></div>
+        <div class="badge"><div class="circle">🤝</div><span data-en="Local First" data-hi="लोकल फर्स्ट">Local First</span></div>
+        <div class="badge"><div class="circle">📍</div><span data-en="Hazard Reporter" data-hi="खतरा रिपोर्टर">Hazard Reporter</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="brand-text" style="color:#fff;">Easy <span style="color:var(--amber);">Tour</span></div>
+        <p style="margin-top:14px;font-size:0.86rem;opacity:0.8;max-width:280px;" data-en="A Smart India Hackathon prototype for a connected, safer, and more evenly spread mountain tourism ecosystem." data-hi="जुड़ा हुआ, सुरक्षित और समान रूप से फैला पर्वतीय पर्यटन पारिस्थितिकी तंत्र — एक स्मार्ट इंडिया हैकाथॉन प्रोटोटाइप।">A Smart India Hackathon prototype for a connected, safer, and more evenly spread mountain tourism ecosystem.</p>
+      </div>
+      <div><h4 data-en="Plan" data-hi="योजना">Plan</h4><ul><li><a href="#guide">AI Guide</a></li><li><a href="#travel">Travel</a></li><li><a href="#stay">Stay</a></li><li><a href="#itinerary">Itinerary</a></li></ul></div>
+      <div><h4 data-en="Stay informed" data-hi="जानकारी में रहें">Stay informed</h4><ul><li><a href="#crowd">Live crowd</a></li><li><a href="#safety">Safety alerts</a></li><li>Permits</li><li>Weather</li></ul></div>
+      <div><h4 data-en="Emergency" data-hi="आपातकाल">Emergency</h4><ul><li>Tourist Helpline · 1363</li><li>National Emergency · 112</li><li>Disaster Mgmt (UK) · 1070</li></ul></div>
+    </div>
+    <div class="foot-bottom">
+      <span>Easy Tour — SIH Prototype, built for demonstration.</span>
+      <span data-en="Sample data only, not live government feeds." data-hi="केवल नमूना डेटा, सरकारी लाइव फ़ीड नहीं।">Sample data only, not live government feeds.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ===================== DATA ===================== */
+const DEST = {
+  mussoorie: {
+    name:"Mussoorie", nameHi:"मसूरी", region:"Queen of the Hills", km:34,
+    status:"alert", statusText:{en:"Landslide reported — Kempty Rd", hi:"भूस्खलन — केम्टी रोड"},
+    weather:{en:"Light rain, 16°C", hi:"हल्की बारिश, 16°C"},
+    advisory:{en:"A landslide was reported this morning near the Kempty Falls road, and the district administration has diverted traffic on the Dehradun–Mussoorie route. Library Chowk and Mall Road remain open and unaffected.", hi:"आज सुबह केम्टी फॉल्स रोड के पास भूस्खलन की सूचना मिली है, और प्रशासन ने देहरादून-मसूरी मार्ग पर यातायात मोड़ दिया है। लाइब्रेरी चौक और मॉल रोड खुले और सुरक्षित हैं।"},
+    alts:["dhanaulti","landour"], hub:"dehradun", permit:false, eco:60,
+    crowd:[8,6,5,10,22,38,55,70,82,90,88,80,72,68,74,80,86,90,84,66,42,26,16,10],
+    stays:[
+      {name:"Cloud's End Retreat",type:"Heritage Hotel",price:6200,rating:4.6,dist:"3.1 km from Mall Rd"},
+      {name:"Pahadi Homestay",type:"Homestay",price:1800,rating:4.4,dist:"1.2 km from Mall Rd"},
+      {name:"Hotel Landmark",type:"Hotel",price:3400,rating:4.1,dist:"0.4 km from Mall Rd"},
+    ]
+  },
+  dhanaulti: {
+    name:"Dhanaulti", nameHi:"धनोल्टी", region:"Quiet pine hamlet", km:60,
+    status:"ok", statusText:{en:"All routes clear", hi:"सभी मार्ग सुगम"},
+    weather:{en:"Clear, 14°C", hi:"साफ़, 14°C"},
+    advisory:{en:"Roads are clear and footfall is a fraction of Mussoorie's. Eco Park and the deodar forest walks are open through the evening.", hi:"सड़कें साफ़ हैं और भीड़ मसूरी की तुलना में बहुत कम है। इको पार्क और देवदार वन की सैर शाम तक खुली है।"},
+    alts:["mussoorie","kanatal"], hub:"dehradun", permit:false, eco:88,
+    crowd:[3,2,2,4,8,14,20,28,34,38,36,32,28,26,30,34,36,30,20,14,8,5,4,3],
+    stays:[
+      {name:"Devdar Woods Camp",type:"Camp",price:2600,rating:4.5,dist:"0.8 km from Eco Park"},
+      {name:"Dhanaulti Cottage",type:"Homestay",price:2100,rating:4.3,dist:"1.5 km from main road"},
+    ]
+  },
+  landour: {
+    name:"Landour", nameHi:"लंढौर", region:"Cantonment quarter", km:36,
+    status:"ok", statusText:{en:"All routes clear", hi:"सभी मार्ग सुगम"},
+    weather:{en:"Light rain, 15°C", hi:"हल्की बारिश, 15°C"},
+    advisory:{en:"Landour sits just above Mussoorie and is unaffected by the Kempty road diversion. Char Dukan and the clock tower walk stay open.", hi:"लंढौर मसूरी से थोड़ा ऊपर है और केम्टी रोड डायवर्जन से अप्रभावित है। चार दुकान और घंटाघर की सैर खुली है।"},
+    alts:["mussoorie","dhanaulti"], hub:"dehradun", permit:false, eco:80,
+    crowd:[4,3,3,5,9,15,20,24,28,30,28,26,24,22,26,30,32,28,18,12,8,6,5,4],
+    stays:[{name:"Rokeby Manor",type:"Heritage Hotel",price:7400,rating:4.7,dist:"0.6 km from Char Dukan"}]
+  },
+  kanatal: {
+    name:"Kanatal", nameHi:"कनाताल", region:"Apple-orchard village", km:78,
+    status:"ok", statusText:{en:"All routes clear", hi:"सभी मार्ग सुगम"},
+    weather:{en:"Cloudy, 13°C", hi:"बादल, 13°C"},
+    advisory:{en:"Kanatal is calm and largely undiscovered compared with Mussoorie, with camping and orchard walks available through the week.", hi:"कनाताल शांत है और मसूरी की तुलना में कम प्रसिद्ध है, यहाँ पूरे सप्ताह कैंपिंग और बाग़ की सैर उपलब्ध है।"},
+    alts:["dhanaulti"], hub:"dehradun", permit:false, eco:90,
+    crowd:[2,2,1,3,6,10,14,18,20,22,20,18,16,14,16,18,20,16,10,6,4,3,2,2],
+    stays:[{name:"Orchard Camp Kanatal",type:"Camp",price:2900,rating:4.5,dist:"2 km from village"}]
+  },
+  nainital: {
+    name:"Nainital", nameHi:"नैनीताल", region:"Lake district", km:290,
+    status:"crowd", statusText:{en:"Overcrowded at the lake front", hi:"झील किनारे अत्यधिक भीड़"},
+    weather:{en:"Clear, 19°C", hi:"साफ़, 19°C"},
+    advisory:{en:"Mall Road and the boating point are at capacity through the afternoon on this weekend. Roads are otherwise clear.", hi:"इस सप्ताहांत दोपहर तक मॉल रोड और नौका स्थल क्षमता पर हैं। बाकी सड़कें साफ़ हैं।"},
+    alts:["bhimtal","sattal"], hub:"kathgodam", permit:false, eco:55,
+    crowd:[10,8,10,20,40,60,78,92,96,98,95,90,86,90,94,96,90,70,50,30,20,14,12,10],
+    stays:[
+      {name:"Lake Vista Hotel",type:"Hotel",price:5200,rating:4.3,dist:"0.2 km from Mall Rd"},
+      {name:"Naini Homestay",type:"Homestay",price:1900,rating:4.2,dist:"1.8 km from Mall Rd"},
+    ]
+  },
+  bhimtal: {
+    name:"Bhimtal", nameHi:"भीमताल", region:"Sister lake town", km:22,
+    status:"ok", statusText:{en:"All routes clear", hi:"सभी मार्ग सुगम"},
+    weather:{en:"Clear, 20°C", hi:"साफ़, 20°C"},
+    advisory:{en:"Bhimtal's lake is a fifth as crowded as Nainital's today, with similar boating and lakeside cafes.", hi:"आज भीमताल झील पर नैनीताल की तुलना में पाँचवां हिस्सा भीड़ है, नौका और झील किनारे कैफ़े दोनों उपलब्ध हैं।"},
+    alts:["nainital","sattal"], hub:"kathgodam", permit:false, eco:82,
+    crowd:[4,3,4,8,14,20,28,34,38,40,38,34,30,32,36,38,34,24,16,10,6,5,4,4],
+    stays:[{name:"Lake County Resort",type:"Resort",price:4400,rating:4.4,dist:"0.5 km from lake"}]
+  },
+  sattal: {
+    name:"Sattal", nameHi:"सातताल", region:"Seven-lakes forest", km:27,
+    status:"ok", statusText:{en:"All routes clear", hi:"सभी मार्ग सुगम"},
+    weather:{en:"Clear, 18°C", hi:"साफ़, 18°C"},
+    advisory:{en:"Popular with birdwatchers and quiet through the week; forest-rest-house stays are limited so book ahead.", hi:"पक्षी-प्रेमियों में लोकप्रिय और सप्ताह भर शांत; वन विश्राम गृह सीमित हैं इसलिए पहले बुक करें।"},
+    alts:["bhimtal"], hub:"kathgodam", permit:false, eco:92,
+    crowd:[2,1,1,3,6,9,12,15,17,18,17,15,13,12,14,16,15,10,7,5,3,2,2,2],
+    stays:[{name:"Sattal Forest Camp",type:"Camp",price:2300,rating:4.6,dist:"1 km from lakes"}]
+  },
+  rishikesh: {
+    name:"Rishikesh", nameHi:"ऋषिकेश", region:"Ganga &amp; adventure hub", km:43,
+    status:"ok", statusText:{en:"All routes clear", hi:"सभी मार्ग सुगम"},
+    weather:{en:"Sunny, 27°C", hi:"धूप, 27°C"},
+    advisory:{en:"Laxman Jhula and Tapovan are busy but moving freely. River-rafting stretches are open with normal water levels today.", hi:"लक्ष्मण झूला और तपोवन व्यस्त हैं पर आवागमन सामान्य है। आज नदी राफ्टिंग सामान्य जलस्तर के साथ खुली है।"},
+    alts:[], hub:"rishikesh_direct", permit:false, eco:70,
+    crowd:[10,8,10,18,30,44,58,68,72,74,70,64,58,60,66,70,74,72,60,44,28,18,14,10],
+    stays:[
+      {name:"Ganga View Homestay",type:"Homestay",price:1600,rating:4.5,dist:"0.3 km from Ram Jhula"},
+      {name:"Riverside Camp Tapovan",type:"Camp",price:2100,rating:4.4,dist:"2 km from Laxman Jhula"},
+      {name:"Zostel Rishikesh",type:"Hostel",price:900,rating:4.3,dist:"1.1 km from Tapovan"},
+    ]
+  },
+  kedarnath: {
+    name:"Kedarnath", nameHi:"केदारनाथ", region:"High-altitude shrine", km:220,
+    status:"alert", statusText:{en:"Heavy rain warning, trek paused", hi:"भारी बारिश चेतावनी, ट्रेक रोका गया"},
+    weather:{en:"Heavy rain, 6°C", hi:"भारी बारिश, 6°C"},
+    advisory:{en:"The Meteorological Department has issued a heavy-rain warning for the Kedarnath valley, and the Sonprayag–Kedarnath trek is temporarily paused for pony and pedestrian traffic. Guptkashi and Ukhimath remain unaffected and offer valley views of the same range.", hi:"मौसम विभाग ने केदारनाथ घाटी के लिए भारी बारिश की चेतावनी दी है, और सोनप्रयाग-केदारनाथ ट्रेक अस्थायी रूप से रोका गया है। गुप्तकाशी और ऊखीमठ अप्रभावित हैं।"},
+    alts:["guptkashi","ukhimath"], hub:"rishikesh_sonprayag", permit:true, eco:40,
+    crowd:[5,5,8,20,45,70,85,90,88,80,70,60,55,58,62,55,40,25,15,8,5,4,4,4],
+    stays:[
+      {name:"GMVN Tourist Rest House",type:"Guesthouse",price:1400,rating:3.9,dist:"0.2 km from temple"},
+      {name:"Sonprayag Riverside Lodge",type:"Lodge",price:1100,rating:4.0,dist:"16 km (base camp)"},
+    ]
+  },
+  guptkashi: {
+    name:"Guptkashi", nameHi:"गुप्तकाशी", region:"Valley town on the same route", km:190,
+    status:"ok", statusText:{en:"All routes clear", hi:"सभी मार्ग सुगम"},
+    weather:{en:"Overcast, 14°C", hi:"बादल, 14°C"},
+    advisory:{en:"Sitting lower in the valley, Guptkashi is clear of the rain warning and has the Vishwanath and Ardhnarishwar temples within walking distance.", hi:"घाटी में नीचे स्थित गुप्तकाशी बारिश चेतावनी से मुक्त है और विश्वनाथ व अर्धनारीश्वर मंदिर पैदल दूरी पर हैं।"},
+    alts:["ukhimath"], hub:"rishikesh_sonprayag", permit:false, eco:75,
+    crowd:[3,3,4,8,14,20,24,26,28,26,24,20,18,20,22,24,22,16,10,7,5,4,3,3],
+    stays:[{name:"Valley View Guesthouse",type:"Guesthouse",price:1300,rating:4.2,dist:"0.5 km from temple"}]
+  },
+  ukhimath: {
+    name:"Ukhimath", nameHi:"ऊखीमठ", region:"Winter seat of Kedarnath", km:200,
+    status:"ok", statusText:{en:"All routes clear", hi:"सभी मार्ग सुगम"},
+    weather:{en:"Overcast, 13°C", hi:"बादल, 13°C"},
+    advisory:{en:"Home to the Omkareshwar temple, where Lord Kedarnath's deity is moved for winter — a calmer alternative with the same devotional significance.", hi:"ओंकारेश्वर मंदिर यहीं है, जहाँ सर्दियों में केदारनाथ की मूर्ति लाई जाती है — समान आध्यात्मिक महत्व वाला शांत विकल्प।"},
+    alts:["guptkashi"], hub:"rishikesh_sonprayag", permit:false, eco:78,
+    crowd:[2,2,3,6,10,14,16,18,19,18,16,14,12,14,16,17,15,11,8,6,4,3,3,2],
+    stays:[{name:"Omkareshwar Guesthouse",type:"Guesthouse",price:1000,rating:4.1,dist:"0.3 km from temple"}]
+  },
+  chopta: {
+    name:"Chopta", nameHi:"चोपता", region:"Mini Switzerland of India", km:200,
+    status:"ok", statusText:{en:"All routes clear", hi:"सभी मार्ग सुगम"},
+    weather:{en:"Cold, misty, 9°C", hi:"ठंडा, धुंधला, 9°C"},
+    advisory:{en:"The Tungnath–Chandrashila trek is open with clear morning visibility. Carry warm layers above the treeline.", hi:"तुंगनाथ-चंद्रशिला ट्रेक साफ़ सुबह की दृश्यता के साथ खुला है। ट्रीलाइन के ऊपर गर्म कपड़े रखें।"},
+    alts:[], hub:"rishikesh_chopta", permit:false, eco:85,
+    crowd:[6,5,6,10,18,28,36,40,38,34,30,26,24,26,30,32,28,20,14,10,8,6,6,5],
+    stays:[{name:"Chopta Meadow Camp",type:"Camp",price:2400,rating:4.6,dist:"0.8 km from trek base"}]
+  },
+  auli: {
+    name:"Auli", nameHi:"औली", region:"Skiing &amp; cable-car slopes", km:280,
+    status:"ok", statusText:{en:"All routes clear", hi:"सभी मार्ग सुगम"},
+    weather:{en:"Clear, 8°C", hi:"साफ़, 8°C"},
+    advisory:{en:"The Joshimath–Auli cable car is running on schedule with clear views of Nanda Devi today.", hi:"जोशीमठ-औली रोपवे आज सामान्य रूप से चल रहा है और नंदा देवी का साफ़ नज़ारा है।"},
+    alts:[], hub:"rishikesh_auli", permit:false, eco:80,
+    crowd:[5,4,5,9,16,24,32,36,34,30,26,22,20,22,26,28,24,16,10,7,5,4,4,4],
+    stays:[{name:"Auli Slope Resort",type:"Resort",price:5800,rating:4.5,dist:"0.4 km from cable car"}]
+  },
+};
+
+const HUBS = {
+  dehradun: { label:{en:"via Dehradun (Jolly Grant / Railway Station)", hi:"देहरादून (जॉली ग्रांट / रेलवे स्टेशन) के रास्ते"},
+    longHaul:{ flight:{fare:3200,dur:"1h 10m"}, train:{fare:745,dur:"5h 05m"}, bus:{fare:550,dur:"6h 50m"} },
+    lastMile:{ shared:{fare:150,dur:"1h 30m", label:{en:"Shared taxi to Mussoorie",hi:"मसूरी के लिए साझा टैक्सी"}}, bus:{fare:80,dur:"2h", label:{en:"State bus",hi:"राज्य बस"}}, private:{fare:1200,dur:"1h 15m", label:{en:"Private cab",hi:"निजी कैब"}} }
+  },
+  kathgodam: { label:{en:"via Kathgodam Railway Station", hi:"काठगोदाम रेलवे स्टेशन के रास्ते"},
+    longHaul:{ flight:{fare:0,dur:"—", na:true}, train:{fare:650,dur:"6h 20m"}, bus:{fare:600,dur:"7h 10m"} },
+    lastMile:{ shared:{fare:150,dur:"1h", label:{en:"Shared taxi to Nainital",hi:"नैनीताल के लिए साझा टैक्सी"}}, bus:{fare:60,dur:"1h 15m", label:{en:"State bus",hi:"राज्य बस"}}, private:{fare:900,dur:"50m", label:{en:"Private cab",hi:"निजी कैब"}} }
+  },
+  rishikesh_direct: { label:{en:"direct to Rishikesh", hi:"सीधे ऋषिकेश"},
+    longHaul:{ flight:{fare:3200,dur:"1h 10m + 20km taxi"}, train:{fare:450,dur:"5h 40m"}, bus:{fare:500,dur:"6h 30m"} },
+    lastMile:{ shared:{fare:0,dur:"—",label:{en:"Already at destination",hi:"गंतव्य पर पहले से"},na:true} }
+  },
+  rishikesh_sonprayag: { label:{en:"via Rishikesh → Sonprayag road", hi:"ऋषिकेश → सोनप्रयाग सड़क के रास्ते"},
+    longHaul:{ flight:{fare:3200,dur:"1h 10m + road"}, train:{fare:450,dur:"5h 40m + road"}, bus:{fare:500,dur:"6h 30m + road"} },
+    lastMile:{ shared:{fare:600,dur:"9h",label:{en:"Shared taxi to Sonprayag",hi:"सोनप्रयाग के लिए साझा टैक्सी"}}, bus:{fare:350,dur:"10h 30m",label:{en:"State bus",hi:"राज्य बस"}}, private:{fare:4800,dur:"8h",label:{en:"Private cab",hi:"निजी कैब"}} }
+  },
+  rishikesh_chopta: { label:{en:"via Rishikesh → Chopta road", hi:"ऋषिकेश → चोपता सड़क के रास्ते"},
+    longHaul:{ flight:{fare:3200,dur:"1h 10m + road"}, train:{fare:450,dur:"5h 40m + road"}, bus:{fare:500,dur:"6h 30m + road"} },
+    lastMile:{ shared:{fare:700,dur:"7h",label:{en:"Shared taxi to Chopta",hi:"चोपता के लिए साझा टैक्सी"}}, bus:{fare:400,dur:"8h",label:{en:"State bus",hi:"राज्य बस"}} }
+  },
+  rishikesh_auli: { label:{en:"via Rishikesh → Joshimath road", hi:"ऋषिकेश → जोशीमठ सड़क के रास्ते"},
+    longHaul:{ flight:{fare:3200,dur:"1h 10m + road"}, train:{fare:450,dur:"5h 40m + road"}, bus:{fare:500,dur:"6h 30m + road"} },
+    lastMile:{ shared:{fare:900,dur:"9h",label:{en:"Shared taxi to Joshimath",hi:"जोशीमठ के लिए साझा टैक्सी"}}, cable:{fare:700,dur:"7m",label:{en:"Cable car to Auli",hi:"औली के लिए रोपवे"}} }
+  }
+};
+
+let lang = 'en';
+let itinerary = [];
+let points = 0;
+
+/* ===================== HELPERS ===================== */
+function t(obj){ return (obj && obj[lang]) ? obj[lang] : (obj ? obj.en : ''); }
+function toast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(()=>el.classList.remove('show'), 2400);
+}
+function openModal(id){ document.getElementById(id).classList.add('show'); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+function addPoints(n){ points += n; document.getElementById('pointsCount').textContent = points; }
+
+function populateSelect(id, excludeStatus){
+  const sel = document.getElementById(id);
+  sel.innerHTML = '';
+  Object.keys(DEST).forEach(key=>{
+    const d = DEST[key];
+    const opt = document.createElement('option');
+    opt.value = key;
+    opt.textContent = (lang==='hi' ? d.nameHi : d.name);
+    sel.appendChild(opt);
+  });
+}
+
+function statusMeta(status){
+  if(status==='alert') return {cls:'warn', icon:'⚠️'};
+  if(status==='crowd') return {cls:'crowd', icon:'👥'};
+  return {cls:'ok', icon:'✓'};
+}
+
+/* ===================== HERO DEMO ===================== */
+function renderHeroDemo(){
+  const key = document.getElementById('heroDest').value;
+  const d = DEST[key];
+  const sm = statusMeta(d.status);
+  let html = `<span class="alert-badge ${sm.cls}">${sm.icon} ${t(d.statusText)}</span>`;
+  html += `<p>${t(d.advisory)}</p>`;
+  if(d.alts && d.alts.length){
+    html += `<div style="font-size:0.78rem;color:var(--slate);margin-top:6px;">${lang==='hi'?'नज़दीकी विकल्प':'Nearby alternatives'}</div>`;
+    html += `<div class="alt-chip-row">` + d.alts.map(a=>`<span class="alt-chip" onclick="jumpToGuide('${a}')">${lang==='hi'?DEST[a].nameHi:DEST[a].name}</span>`).join('') + `</div>`;
+  }
+  document.getElementById('heroReply').innerHTML = html;
+}
+function jumpToGuide(key){
+  document.getElementById('guideDest').value = key;
+  document.getElementById('guide').scrollIntoView({behavior:'smooth'});
+  renderGuide();
+}
+
+/* ===================== AI GUIDE ===================== */
+function renderGuide(fromClick){
+  const key = document.getElementById('guideDest').value;
+  const d = DEST[key];
+  const sm = statusMeta(d.status);
+  let html = `<span class="alert-badge ${sm.cls}">${sm.icon} ${t(d.statusText)}</span>`;
+  html += `<p style="font-size:0.98rem;">${t(d.advisory)}</p>`;
+  html += `<div class="cond-grid">
+    <div class="cond-tile"><span>${lang==='hi'?'मौसम':'Weather'}</span><b>${t(d.weather)}</b></div>
+    <div class="cond-tile"><span>${lang==='hi'?'दूरी':'Distance'}</span><b>${d.km} km</b></div>
+    <div class="cond-tile"><span>${lang==='hi'?'पीक भीड़':'Peak crowd'}</span><b>${Math.max(...d.crowd)}%</b></div>
+  </div>`;
+  if(d.permit){
+    html += `<div class="tag-row"><span class="tag permit">${lang==='hi'?'परमिट आवश्यक':'Permit required'}</span><span class="tag eco">${lang==='hi'?'इको-नाज़ुक क्षेत्र':'Eco-fragile zone'}</span></div>`;
+  }
+  if(d.alts && d.alts.length){
+    html += `<h4 style="margin-top:10px;">${lang==='hi'?'बेहतर विकल्प':'Better right now'}</h4>`;
+    html += `<div class="alt-card-row">` + d.alts.map(a=>{
+      const ad = DEST[a];
+      const asm = statusMeta(ad.status);
+      return `<div class="alt-card">
+        <div class="tag-row"><span class="tag ${asm.cls==='ok'?'eco':''}">${asm.icon} ${t(ad.statusText)}</span></div>
+        <h4>${lang==='hi'?ad.nameHi:ad.name}</h4>
+        <p>${ad.region} · ${ad.km} km</p>
+        <button class="btn small ghost" onclick="addToItinerary('${a}','destination')">${lang==='hi'?'योजना में जोड़ें':'Add to itinerary'}</button>
+      </div>`;
+    }).join('') + `</div>`;
+  } else {
+    html += `<div class="crowd-callout good" style="margin-top:16px;"><b>${lang==='hi'?'सीधे जाएं':'Good to go as planned'}</b>${lang==='hi'?'फिलहाल कोई बड़ा विकल्प सुझाने की ज़रूरत नहीं है।':'No major detour needed right now — conditions are steady.'}</div>`;
+  }
+  html += `<button class="btn amber" style="margin-top:20px;" onclick="addToItinerary('${key}','destination')">${lang==='hi'?'यह योजना में जोड़ें':'Add this to my itinerary'}</button>`;
+  document.getElementById('guideOutput').innerHTML = html;
+  if(fromClick) addPoints(10);
+}
+
+/* ===================== TRAVEL ===================== */
+function renderTravel(){
+  const from = document.getElementById('travelFrom').value;
+  const toSel = document.getElementById('travelTo');
+  if(!toSel.options.length){ populateSelect('travelTo'); }
+  const toKey = toSel.value || Object.keys(DEST)[0];
+  const d = DEST[toKey];
+  const hub = HUBS[d.hub];
+  const pax = parseInt(document.getElementById('travelPax').value || '2', 10);
+
+  let html = '';
+  if(from === 'Delhi' && hub.longHaul){
+    html += `<div class="leg"><div class="leg-head"><span>${lang==='hi'?'चरण 1 · दिल्ली →':'Leg 1 · Delhi →'} ${t(hub.label)}</span><span>${lang==='hi'?'लंबी दूरी':'Long-haul'}</span></div>`;
+    Object.entries(hub.longHaul).forEach(([mode,info])=>{
+      html += fareRow(mode, info, pax);
+    });
+    html += `</div>`;
+  }
+  html += `<div class="leg"><div class="leg-head"><span>${lang==='hi'?'चरण 2 · आख़िरी मील':'Leg 2 · Last mile'} → ${lang==='hi'?d.nameHi:d.name}</span><span>${lang==='hi'?'स्थानीय':'Local'}</span></div>`;
+  Object.entries(hub.lastMile).forEach(([mode,info])=>{
+    html += fareRow(mode, info, pax);
+  });
+  html += `</div>`;
+
+  if(d.permit){
+    html += `<div class="note-strip">🪪 <span>${lang==='hi'?'इस मार्ग के लिए इनर-लाइन/इको परमिट चाहिए — गाइड सेक्शन से आवेदन करें।':'This route needs an inner-line / eco permit — apply from the AI Guide section.'}</span></div>`;
+  }
+  if(d.status !== 'ok'){
+    const sm = statusMeta(d.status);
+    html += `<div class="note-strip">${sm.icon} <span>${t(d.statusText)} — ${lang==='hi'?'यात्रा से पहले सलाह देखें':'check the advisory before you travel'}.</span></div>`;
+  }
+  document.getElementById('travelResults').innerHTML = html;
+}
+function fareRow(mode, info, pax){
+  const modeIcons = {flight:'✈️', train:'🚆', bus:'🚌', shared:'🚕', private:'🚘', cable:'🚡'};
+  const modeLabels = {flight:{en:'Flight',hi:'फ्लाइट'}, train:{en:'Train',hi:'ट्रेन'}, bus:{en:'Bus',hi:'बस'}, shared:{en:'Shared taxi',hi:'साझा टैक्सी'}, private:{en:'Private cab',hi:'निजी कैब'}, cable:{en:'Cable car',hi:'रोपवे'}};
+  if(info.na){
+    return `<div class="fare-row"><div class="mode-name">${modeIcons[mode]||''} ${t(info.label||modeLabels[mode])}</div><div class="muted">${lang==='hi'?'उपलब्ध नहीं':'Not available'}</div><div></div><div></div><div></div></div>`;
+  }
+  const total = info.fare * (mode==='private'||mode==='shared'&&info.whole ? 1 : Math.max(pax,1));
+  const displayTotal = (mode==='private') ? info.fare : info.fare * Math.max(pax,1);
+  return `<div class="fare-row">
+    <div class="mode-name">${modeIcons[mode]||''} ${t(info.label||modeLabels[mode])}</div>
+    <div class="muted">${info.dur}</div>
+    <div class="muted">₹${info.fare}/${lang==='hi'?'व्यक्ति':'pax'}</div>
+    <div class="price">₹${displayTotal.toLocaleString('en-IN')}</div>
+    <button class="btn small ghost" onclick="toast('${lang==='hi'?'बुकिंग डेमो में उपलब्ध नहीं':'Booking is not wired up in this prototype'}')">${lang==='hi'?'चुनें':'Select'}</button>
+  </div>`;
+}
+
+/* ===================== STAY ===================== */
+let stayBudget = 'all';
+function renderStayFilter(){
+  const wrap = document.getElementById('stayFilter');
+  const filters = [
+    {key:'all', label:{en:'All budgets',hi:'सभी बजट'}},
+    {key:'budget', label:{en:'Under ₹2,000',hi:'₹2,000 से कम'}},
+    {key:'mid', label:{en:'₹2,000–₹4,500',hi:'₹2,000–₹4,500'}},
+    {key:'premium', label:{en:'₹4,500+',hi:'₹4,500+'}},
+  ];
+  wrap.innerHTML = filters.map(f=>`<button class="chip-filter ${stayBudget===f.key?'active':''}" onclick="setStayBudget('${f.key}')">${t(f.label)}</button>`).join('');
+}
+function setStayBudget(key){ stayBudget = key; renderStayFilter(); renderStay(); }
+function renderStay(){
+  const key = document.getElementById('stayDest') ? document.getElementById('stayDest').value : null;
+  const grid = document.getElementById('stayGrid');
+  let all = [];
+  Object.keys(DEST).forEach(dk=>{
+    DEST[dk].stays.forEach(s=> all.push({...s, destKey:dk}));
+  });
+  all = all.filter(s=>{
+    if(stayBudget==='budget') return s.price < 2000;
+    if(stayBudget==='mid') return s.price >= 2000 && s.price <= 4500;
+    if(stayBudget==='premium') return s.price > 4500;
+    return true;
+  }).slice(0,9);
+  grid.innerHTML = all.map(s=>`
+    <div class="stay-card">
+      <div class="stay-img">🏔️</div>
+      <div class="stay-body">
+        <h4>${s.name}</h4>
+        <div class="stay-meta">${s.type} · ${lang==='hi'?DEST[s.destKey].nameHi:DEST[s.destKey].name} · ${s.dist}</div>
+        <span class="rating">★ ${s.rating}</span>
+        <div class="stay-price">₹${s.price.toLocaleString('en-IN')} <span>/ ${lang==='hi'?'रात':'night'}</span></div>
+        <button class="btn small block" onclick="addToItinerary('${s.destKey}','stay','${s.name.replace(/'/g,"")}')">${lang==='hi'?'योजना में जोड़ें':'Add to itinerary'}</button>
+      </div>
+    </div>`).join('');
+}
+
+/* ===================== CROWD ===================== */
+function renderCrowd(){
+  const key = document.getElementById('crowdDest').value;
+  const d = DEST[key];
+  const bars = document.getElementById('crowdBars');
+  const nowHour = new Date().getHours();
+  bars.innerHTML = d.crowd.map((v,i)=>{
+    let color = 'var(--mist)';
+    if(v>=80) color = 'var(--rust)';
+    else if(v>=50) color = 'var(--amber)';
+    const isNow = i===nowHour;
+    return `<div class="bar ${isNow?'now':''}" style="height:${Math.max(v,3)}%;background:${color};" title="${i}:00 — ${v}%"></div>`;
+  }).join('');
+  document.getElementById('crowdNowLabel').textContent = (lang==='hi'?'अभी: ':'Now: ') + (d.crowd[nowHour]||d.crowd[12]) + '%';
+
+  const peak = Math.max(...d.crowd);
+  const wrap = document.getElementById('crowdCalloutWrap');
+  if(peak >= 75 && d.alts && d.alts.length){
+    const alt = DEST[d.alts[0]];
+    wrap.innerHTML = `<div class="crowd-callout"><b>${lang==='hi'?'भीड़ चरम पर':'Crowding peaks today'}</b>${lang==='hi'?`दोपहर के आसपास भीड़ ${peak}% तक पहुँचती है। इसके बजाय `:`Footfall climbs to ${peak}% around midday. Consider `}<a href="#" onclick="jumpToGuide('${d.alts[0]}');return false;" style="color:var(--pine-deep);font-weight:600;">${lang==='hi'?alt.nameHi:alt.name}</a> ${lang==='hi'?'पर विचार करें, जहाँ आमतौर पर कम भीड़ रहती है।':'nearby, which typically runs quieter.'}</div>`;
+  } else {
+    wrap.innerHTML = `<div class="crowd-callout good"><b>${lang==='hi'?'आरामदायक भीड़':'Comfortable most of the day'}</b>${lang==='hi'?`पीक भीड़ केवल ${peak}% तक पहुँचती है — किसी भी समय जाना ठीक रहेगा।`:`Peak footfall only reaches ${peak}% — most times of day work well.`}</div>`;
+  }
+}
+
+/* ===================== SAFETY ===================== */
+function renderAlerts(){
+  const feed = document.getElementById('alertFeed');
+  const active = Object.keys(DEST).filter(k=>DEST[k].status!=='ok').map(k=>({key:k, ...DEST[k]}));
+  if(!active.length){
+    feed.innerHTML = `<p style="opacity:0.8;">${lang==='hi'?'फ़िलहाल कोई सक्रिय अलर्ट नहीं है।':'No active alerts right now.'}</p>`;
+    return;
+  }
+  feed.innerHTML = active.map(a=>{
+    const sev = a.status==='alert' ? 'high' : 'med';
+    return `<div class="alert-item">
+      <span class="sev-dot ${sev}"></span>
+      <div><h4>${lang==='hi'?a.nameHi:a.name}</h4><span>${t(a.statusText)}</span></div>
+      <button class="btn small ghost" onclick="jumpToGuide('${a.key}')">${lang==='hi'?'विवरण':'Details'}</button>
+    </div>`;
+  }).join('');
+}
+
+/* ===================== ITINERARY ===================== */
+function addToItinerary(destKey, type, stayName){
+  const label = type==='stay' ? `${stayName} — ${lang==='hi'?DEST[destKey].nameHi:DEST[destKey].name}` : (lang==='hi'?DEST[destKey].nameHi:DEST[destKey].name);
+  itinerary.push({destKey, type, label, day: itinerary.length+1});
+  renderItinerary();
+  document.getElementById('itinCount').textContent = itinerary.length;
+  addPoints(type==='stay'?5:8);
+  toast((lang==='hi'?'जोड़ा गया: ':'Added: ') + label);
+}
+function removeFromItinerary(idx){
+  itinerary.splice(idx,1);
+  itinerary.forEach((it,i)=> it.day = i+1);
+  renderItinerary();
+  document.getElementById('itinCount').textContent = itinerary.length;
+}
+function renderItinerary(){
+  const list = document.getElementById('itinList');
+  if(!itinerary.length){
+    list.innerHTML = `<div class="itin-empty">${lang==='hi'?'अभी तक कुछ भी नहीं जोड़ा गया — गाइड, यात्रा या ठहराव से जोड़ना शुरू करें।':'Nothing added yet — start adding from the Guide, Travel or Stay sections.'}</div>`;
+  } else {
+    list.innerHTML = itinerary.map((it,i)=>`
+      <div class="itin-row">
+        <div><span class="day-badge">${lang==='hi'?'दिन':'Day'} ${it.day}</span>${it.label}</div>
+        <button class="remove-btn" onclick="removeFromItinerary(${i})">${lang==='hi'?'हटाएं':'Remove'}</button>
+      </div>`).join('');
+  }
+  const avgEco = itinerary.length ? Math.round(itinerary.reduce((s,it)=>s+DEST[it.destKey].eco,0)/itinerary.length) : 70;
+  document.getElementById('ecoFill').style.width = avgEco + '%';
+  document.getElementById('ecoScoreLabel').textContent = avgEco + '/100';
+}
+
+/* ===================== LOCAL GUIDES ===================== */
+const GUIDES = [
+  {name:'Rajendra Bisht', role:{en:'Trek guide · Chopta &amp; Tungnath',hi:'ट्रेक गाइड · चोपता व तुंगनाथ'}, exp:'12 yrs', init:'RB'},
+  {name:'Meena Rawat', role:{en:'Homestay host · Dhanaulti',hi:'होमस्टे होस्ट · धनोल्टी'}, exp:'6 yrs', init:'MR'},
+  {name:'Suresh Panwar', role:{en:'River-rafting instructor · Rishikesh',hi:'राफ्टिंग प्रशिक्षक · ऋषिकेश'}, exp:'9 yrs', init:'SP'},
+];
+function renderGuideCards(){
+  document.getElementById('guideCards').innerHTML = GUIDES.map(g=>`
+    <div class="guide-card">
+      <div class="avatar">${g.init}</div>
+      <h4 style="font-size:0.98rem;">${g.name}</h4>
+      <p style="font-size:0.82rem;color:var(--slate);margin:6px 0 12px;">${t(g.role)} · ${g.exp}</p>
+      <button class="btn small block ghost" onclick="requestGuide('${g.name}')">${lang==='hi'?'अनुरोध भेजें':'Request'}</button>
+    </div>`).join('');
+}
+function requestGuide(name){
+  document.getElementById('guideModalText').textContent = (lang==='hi'?`आपका अनुरोध ${name} को भेज दिया गया है। वे आमतौर पर 20 मिनट में जवाब देते हैं।`:`Your request has been sent to ${name}. They typically respond within 20 minutes.`);
+  openModal('guideModal');
+  addPoints(4);
+}
+
+/* ===================== LANGUAGE ===================== */
+function setLang(l){
+  lang = l;
+  document.getElementById('langEnBtn').classList.toggle('active', l==='en');
+  document.getElementById('langHiBtn').classList.toggle('active', l==='hi');
+  document.documentElement.lang = l;
+  document.querySelectorAll('[data-en]').forEach(el=>{
+    const val = el.getAttribute(l==='hi' ? 'data-hi' : 'data-en');
+    if(val !== null) el.innerHTML = val;
+  });
+  populateSelect('heroDest'); document.getElementById('heroDest').value = document.getElementById('heroDest').value;
+  populateSelect('guideDest');
+  populateSelect('travelTo');
+  populateSelect('crowdDest');
+  renderHeroDemo(); renderGuide(); renderTravel(); renderStayFilter(); renderStay(); renderCrowd(); renderAlerts(); renderItinerary(); renderGuideCards();
+}
+
+/* ===================== INIT ===================== */
+function init(){
+  populateSelect('heroDest');
+  populateSelect('guideDest');
+  populateSelect('travelTo');
+  populateSelect('crowdDest');
+  document.getElementById('heroDest').value = 'mussoorie';
+  document.getElementById('guideDest').value = 'mussoorie';
+  document.getElementById('crowdDest').value = 'nainital';
+  document.getElementById('travelTo').value = 'kedarnath';
+
+  renderHeroDemo();
+  renderGuide();
+  renderTravel();
+  renderStayFilter();
+  renderStay();
+  renderCrowd();
+  renderAlerts();
+  renderItinerary();
+  renderGuideCards();
+}
+init();
+</script>
+</body>
+</html>
